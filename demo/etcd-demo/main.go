@@ -19,7 +19,7 @@ func main() {
 	defer cli.Close()
 
 	//put
-	str := "[{\"path\":\"D:\\\\goprojects\\\\src\\\\ch06-qimiProject ailf-demo\\\\xx.log\",\"topic\":\"web_log\"}]\n"
+	str := `[{"path":"D:/goprojects/src/ch06-qimiProject/demo/tailf-demo/xx.log","topic":"abc"}]`
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	_, err = cli.Put(ctx, "collect_log_172.22.106.111_conf", str)
 	if err != nil {
@@ -30,11 +30,12 @@ func main() {
 
 	//get
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	gr, err := cli.Get(ctx, "k2")
+	gr, err := cli.Get(ctx, "collect_log_172.22.106.111_conf")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+	fmt.Println(gr.Kvs[0])
 	for _, ev := range gr.Kvs {
 		fmt.Println(string(ev.Key))
 		fmt.Println(string(ev.Value))

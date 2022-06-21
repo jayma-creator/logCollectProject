@@ -18,7 +18,7 @@ func main() {
 	}
 	defer cli.Close()
 
-	watchCh := cli.Watch(context.Background(), "k2")
+	watchCh := cli.Watch(context.Background(), "collect_log_172.22.106.111_conf")
 	fmt.Println(watchCh)
 	for wresp := range watchCh {
 		fmt.Println(watchCh)
