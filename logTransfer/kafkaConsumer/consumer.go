@@ -30,7 +30,7 @@ func Init(addr []string, topic string) (err error) {
 			logrus.Errorf("failed to start consumer for partition %d,err:%v\n", partition, err)
 			return
 		}
-		// 异步从每个分区消费信息
+		// 异步从每个分区消费
 		logrus.Info("start to consume...")
 		go func(sarama.PartitionConsumer) {
 			for msg := range pc.Messages() {
