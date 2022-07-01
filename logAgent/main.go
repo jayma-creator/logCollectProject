@@ -18,12 +18,13 @@ func run() {
 
 func main() {
 	ip := common.GetIP()
-	file := "./logCollect/conf/conf.ini"
+	file := "./logAgent/conf/logAgent.ini"
 	err := ini.MapTo(configObj, file)
 	if err != nil {
 		logrus.Errorf("load config failed, err:%v", err)
 		return
 	}
+	logrus.Info("load config success")
 
 	//连接kafka，循环读取消息管道
 	err = kafkaProducer.Init([]string{configObj.KafkaConfig.Address}, configObj.KafkaConfig.ChanSize)

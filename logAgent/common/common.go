@@ -7,9 +7,9 @@ import (
 )
 
 type Config struct {
-	KafkaConfig  `ini:"kafka"`
-	CollectEntry `ini:"collect"`
-	EtcdConfig   `ini:"etcd"`
+	*KafkaConfig  `ini:"kafka"`
+	*CollectEntry `ini:"collect"`
+	*EtcdConfig   `ini:"etcd"`
 }
 type KafkaConfig struct {
 	Address  string `ini:"address"`

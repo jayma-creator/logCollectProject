@@ -1,7 +1,6 @@
 package kafkaProducer
 
 import (
-	"ch06-qimiProject/logTransfer/kafkaConsumer"
 	"fmt"
 	"github.com/Shopify/sarama"
 	"github.com/sirupsen/logrus"
@@ -22,7 +21,6 @@ func Init(address []string, chanSize int64) (err error) {
 		logrus.Error("kafka: producer closed, err:", err)
 		return
 	}
-	go kafkaConsumer.LoadMsg()
 
 	//信息管道
 	msgChan = make(chan *sarama.ProducerMessage, chanSize)
