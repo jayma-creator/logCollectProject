@@ -18,8 +18,8 @@ type KafkaConfig struct {
 }
 
 type EtcdConfig struct {
-	Address    string `ini:"address"`
-	CollectKey string `ini:"collect_key"`
+	Address    []string `ini:"address"`
+	CollectKey string   `ini:"collect_key"`
 }
 
 //要收集的日志的配置项结构体

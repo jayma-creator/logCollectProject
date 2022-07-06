@@ -1,7 +1,6 @@
 package kafkaProducer
 
 import (
-	"fmt"
 	"github.com/Shopify/sarama"
 	"github.com/sirupsen/logrus"
 )
@@ -11,17 +10,17 @@ var msgChan chan *sarama.ProducerMessage
 
 func Init(address []string, chanSize int64) (err error) {
 	config := sarama.NewConfig()
-	config.Producer.RequiredAcks = sarama.WaitForAll
-	config.Producer.Partitioner = sarama.NewRandomPartitioner
-	config.Producer.Return.Successes = true
+	config.Producer.RequiredAcks = sarama.WaitForAll          //leader和follow都确认
+	config.Producer.Partitioner = sarama.NewRandomPartitioner //新选出一个partition
+	config.Producer.Return.Successes = true                   //成功交付的消息在success channel返回
 
 	//初始化连接
 	Client, err = sarama.NewSyncProducer(address, config)
 	if err != nil {
-		logrus.Error("kafka: producer closed, err:", err)
+		logrus.Error("连接Kafka失败:", err)
 		return
 	}
-
+	defer Client.Close()
 	//信息管道
 	msgChan = make(chan *sarama.ProducerMessage, chanSize)
 	go sendMsg()
@@ -40,7 +39,7 @@ func sendMsg() {
 				return
 			}
 			logrus.Info("send msg to kafka success.")
-			fmt.Println(pid, offset)
+			logrus.Info(pid, offset)
 		}
 	}
 }

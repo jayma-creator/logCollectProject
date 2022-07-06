@@ -2,7 +2,6 @@ package tailfile
 
 import (
 	"ch06-qimiProject/logAgent/common"
-	"fmt"
 	"github.com/sirupsen/logrus"
 )
 
@@ -25,7 +24,7 @@ func Init(allConf []common.CollectEntry) (err error) {
 		tt := newTailTask(conf.Path, conf.Topic)
 		err = tt.Init()
 		if err != nil {
-			fmt.Println(err)
+			logrus.Error(err)
 			return
 		}
 		logrus.Infof("create a tail task for path:%s success", conf.Path)
@@ -55,7 +54,7 @@ func (t *tailTaskMgr) watch() {
 			tt := newTailTask(conf.Path, conf.Topic)
 			err := tt.Init()
 			if err != nil {
-				fmt.Println(err)
+				logrus.Error(err)
 				return
 			}
 			logrus.Infof("create a tail task for path:%s success", conf.Path)

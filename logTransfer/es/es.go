@@ -27,7 +27,7 @@ func Init(addr, index string, goroutineNum, maxSize int) (err error) {
 		logDataChan: make(chan interface{}, maxSize),
 	}
 	logrus.Info("connect to es success")
-	// 从通道中取出数据,写入到kafka中去
+	// 从通道中取出数据,写入到es中去
 	for i := 0; i < goroutineNum; i++ {
 		go sendToES()
 	}
@@ -53,7 +53,7 @@ func sendToES() {
 	}
 }
 
-// 通过一个首字母大写的函数从包外接收msg,发送到chan中
+// 从包外接收msg,发送到chan中
 func PutLogData(msg interface{}) {
 	esClient.logDataChan <- msg
 }

@@ -34,7 +34,7 @@ func main() {
 	}
 
 	//连接etcd
-	err = etcd.Init([]string{configObj.EtcdConfig.Address})
+	err = etcd.Init(configObj.EtcdConfig.Address)
 	if err != nil {
 		logrus.Errorf("init etcd failed, err:%v", err)
 		return

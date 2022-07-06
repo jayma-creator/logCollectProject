@@ -50,20 +50,22 @@ func GetConf(key string) (collectEntryList []common.CollectEntry, err error) {
 func WatchConf(key string) {
 	for {
 		watchCh := client.Watch(context.Background(), key)
-		for wresp := range watchCh {
+		for resp := range watchCh {
 			logrus.Info("get new conf from etcd")
-			for _, evt := range wresp.Events {
+			for _, evt := range resp.Events {
 				var newConf []common.CollectEntry
 				//如果是删除
 				if evt.Type == clientv3.EventTypeDelete {
 					tailfile.SendNewConf(newConf)
 					continue
 				}
+				//把新的路径反序列化到新配置里
 				err := json.Unmarshal(evt.Kv.Value, &newConf)
 				if err != nil {
 					logrus.Error(err)
 					continue
 				}
+				//再发新配置
 				tailfile.SendNewConf(newConf)
 			}
 		}

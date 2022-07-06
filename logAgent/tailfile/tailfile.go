@@ -33,9 +33,9 @@ func (t *tailTask) Init() (err error) {
 	cfg := tail.Config{
 		ReOpen:    true,
 		Follow:    true,
-		Location:  &tail.SeekInfo{Offset: 0, Whence: 2},
-		MustExist: false,
-		Poll:      true,
+		Location:  &tail.SeekInfo{Offset: 0, Whence: 2}, //2表示末尾
+		MustExist: false,                                //允许不存在
+		Poll:      true,                                 //轮询
 	}
 	//用tail打开文件
 	t.tObj, err = tail.TailFile(t.path, cfg)
