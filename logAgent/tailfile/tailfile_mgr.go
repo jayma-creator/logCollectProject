@@ -64,11 +64,13 @@ func (t *tailTaskMgr) watch() {
 		for key, task := range t.tailTaskMap {
 			var found bool
 			for _, conf := range newConf {
+				//找到相同的，不处理
 				if key == conf.Path {
 					found = true
 					break
 				}
 			}
+			//没找到相同的，把旧的停了
 			if !found {
 				logrus.Infof("the task collect path:%s need to stop.", task.path)
 				delete(t.tailTaskMap, key)

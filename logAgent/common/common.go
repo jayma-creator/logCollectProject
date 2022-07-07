@@ -13,7 +13,6 @@ type Config struct {
 }
 type KafkaConfig struct {
 	Address  string `ini:"address"`
-	WebLog   string `ini:"web_log"`
 	ChanSize int64  `ini:"chan_size"`
 }
 

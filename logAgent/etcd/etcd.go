@@ -5,7 +5,6 @@ import (
 	"ch06-qimiProject/logAgent/tailfile"
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/coreos/etcd/clientv3"
 	"github.com/sirupsen/logrus"
 	"time"
@@ -41,7 +40,7 @@ func GetConf(key string) (collectEntryList []common.CollectEntry, err error) {
 	ret := resp.Kvs[0]
 	err = json.Unmarshal(ret.Value, &collectEntryList)
 	if err != nil {
-		fmt.Println(err)
+		logrus.Error(err)
 		return
 	}
 	return
@@ -59,7 +58,7 @@ func WatchConf(key string) {
 					tailfile.SendNewConf(newConf)
 					continue
 				}
-				//把新的路径反序列化到新配置里
+				//存入的是json格式，取出来反序列化到新配置里
 				err := json.Unmarshal(evt.Kv.Value, &newConf)
 				if err != nil {
 					logrus.Error(err)

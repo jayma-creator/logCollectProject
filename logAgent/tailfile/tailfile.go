@@ -41,6 +41,7 @@ func (t *tailTask) Init() (err error) {
 	t.tObj, err = tail.TailFile(t.path, cfg)
 	return
 }
+
 func (t *tailTask) run() {
 	//读取日志，发往kafka
 	logrus.Infof("collect for path:%s is running...", t.path)

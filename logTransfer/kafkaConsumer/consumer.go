@@ -2,10 +2,12 @@ package kafkaConsumer
 
 import (
 	"ch06-qimiProject/logTransfer/es"
-	"encoding/json"
 	"github.com/Shopify/sarama"
 	"github.com/sirupsen/logrus"
+	"sync"
 )
+
+var wg sync.WaitGroup
 
 func Init(addr []string, topic string) (err error) {
 	// 创建新的消费者
@@ -30,22 +32,23 @@ func Init(addr []string, topic string) (err error) {
 			logrus.Errorf("failed to start consumer for partition %d,err:%v\n", partition, err)
 			return
 		}
+		defer pc.AsyncClose()
 		// 异步从每个分区消费
 		logrus.Info("start to consume...")
 		go func(sarama.PartitionConsumer) {
+			wg.Add(1)
+			defer wg.Done()
 			for msg := range pc.Messages() {
 				logrus.Info(msg.Topic, string(msg.Value))
-				var m1 map[string]interface{}
-				err = json.Unmarshal(msg.Value, &m1)
+				es.SendToES(msg.Topic, msg.Value)
 				if err != nil {
 					logrus.Errorf("unmarshal msg failed, err:%v\n", err)
 					continue
 				}
-				// 为了将同步流程异步化,所以将取出的日志数据先放到channel中
-				es.PutLogData(m1)
 			}
 		}(pc)
 	}
+	wg.Wait()
 	logrus.Info("Init kafka success")
 	return
 }

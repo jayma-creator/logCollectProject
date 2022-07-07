@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// 1. 加载配置文件
+	//加载配置文件
 	var cfg = new(common.Config)
 	err := ini.MapTo(cfg, "./logTransfer/config/logTransfer.ini")
 	if err != nil {
@@ -18,14 +18,14 @@ func main() {
 	}
 	logrus.Info("load config success")
 
-	// 2. 连接ES
-	err = es.Init(cfg.ESConf.Address, cfg.ESConf.Index, cfg.ESConf.GoNum, cfg.ESConf.MaxSize)
+	//连接ES
+	err = es.Init(cfg.ESConf.Address)
 	if err != nil {
 		logrus.Errorf("Init es failed,err:%v\n", err)
 		return
 	}
 
-	// 3. 连接kafka
+	//连接kafka
 	err = kafkaConsumer.Init([]string{cfg.KafkaConf.Address}, cfg.KafkaConf.Topic)
 	if err != nil {
 		logrus.Errorf("connect to kafka failed,err:%v\n", err)
