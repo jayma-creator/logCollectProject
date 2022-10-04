@@ -24,7 +24,7 @@ func main() {
 		logrus.Errorf("load config failed, err:%v", err)
 		return
 	}
-	logrus.Info("load config success")
+	logrus.Info("load config  success")
 
 	//连接kafka，循环读取消息管道
 	err = kafkaProducer.Init([]string{configObj.KafkaConfig.Address}, configObj.KafkaConfig.ChanSize)
